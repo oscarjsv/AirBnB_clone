@@ -18,7 +18,7 @@ class BaseModel():
     def __str__(self):
         """Returns string representation of an instance"""
         return("[{}] ({}) {}"
-               .format(BaseModel.__name__, self.id, self.__dict__))
+               .format(type(self).__class__, self.id, self.__dict__))
 
     def save(self):
         """Save an instance and set the updated time"""
@@ -28,7 +28,7 @@ class BaseModel():
         """Returns the attributes of the instance as a dict"""
         var = self.__dict__.copy()
 
-        var['__class__'] = BaseModel.__name__
+        var['__class__'] = type(self).__class__
         var['created_at'] = self.created_at.isoformat()
         var['updated_at'] = self.updated_at.isoformat()
 
