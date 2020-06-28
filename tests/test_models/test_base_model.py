@@ -5,6 +5,7 @@ from datetime import datetime
 from models.base_model import BaseModel
 from time import sleep
 from unittest import TestCase
+import uuid
 
 
 class TestBaseModel(TestCase):
@@ -30,6 +31,20 @@ class TestBaseModel(TestCase):
         self.assertEqual(obj.created_at.replace(microsecond=0), now)
         self.assertEqual(obj.updated_at.replace(microsecond=0), now)
 
+    def test_constructor_kwargs(self):
+        """Test constructor that has kwargs as attributes values"""
+        obj = BaseModel()
+        obj.name = "Holberton"
+        obj.my_number = 89
+        json_attributes = obj.to_dict()
+
+        obj2 = BaseModel(**json_attributes)
+
+        self.assertIsInstance(obj2, BaseModel)
+        self.assertIsInstance(json_attributes, dict)
+        self.assertEqual(obj.to_dict(), obj2.to_dict())
+        self.assertIsNot(obj, obj2)
+
     def test_save(self):
         """Test save method"""
         obj = BaseModel()
@@ -43,6 +58,24 @@ class TestBaseModel(TestCase):
 
     def test_dictionary(self):
         """Test to_dict method"""
-        output = BaseModel().to_dict()
+        obj = BaseModel()
+        obj.name = "Holberton"
+        obj.my_number = 89
+
+        output = obj.to_dict()
 
         self.assertIsInstance(output, dict)
+
+        o_id = output['id']
+        updated_at = output['updated_at']
+        created_at = output['created_at']
+        class_name = output['__class__']
+        name = output['name']
+        my_number = output['my_number']
+
+        self.assertIsInstance(o_id, str)
+        self.assertIsInstance(updated_at, str)
+        self.assertIsInstance(created_at, str)
+        self.assertIsInstance(class_name, str)
+        self.assertIsInstance(name, str)
+        self.assertIsInstance(my_number, int)
