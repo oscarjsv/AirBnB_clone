@@ -11,11 +11,20 @@ class BaseModel():
 
     def __init__(self, *args, **kwargs):
         """Constructor"""
-        uuid_gen = uuid.uuid4()
-        self.id = str(uuid_gen)
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        if kwargs:
+            for key, value in kwargs.items():
+                if key != "__class__":
+                    setattr(self, key, value)
+                if hasattr(self, 'created_at') and type(self.created_at) is str:
+                    self.created_at = datetime.strptime(kwargs['created_at'], time)
+                if hasattr(self, 'updated_at') and type(self.updated_at) is str:
+                    self.updated_at = datetime.strptime(kwargs['created_at'], time)
+        else:
 
+            uuid_gen = uuid.uuid4()
+            self.id = str(uuid_gen)
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
     def __str__(self):
         """Returns string representation of an instance"""
         return("[{}] ({}) {}"
