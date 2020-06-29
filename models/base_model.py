@@ -2,6 +2,7 @@
 """BaseModel for Airbnb Project"""
 import uuid
 from datetime import datetime
+from models import storage
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -25,6 +26,8 @@ class BaseModel():
             self.id = str(uuid_gen)
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            storage.new(self)
+            
     def __str__(self):
         """Returns string representation of an instance"""
         return("[{}] ({}) {}"
@@ -33,6 +36,9 @@ class BaseModel():
     def save(self):
         """Save an instance and set the updated time"""
         self.updated_at = datetime.now()
+        storage.save()
+        
+
 
     def to_dict(self):
         """Returns the attributes of the instance as a dict"""
