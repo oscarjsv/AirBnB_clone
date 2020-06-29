@@ -2,7 +2,7 @@
 """BaseModel for Airbnb Project"""
 import uuid
 from datetime import datetime
-from models import storage
+from models.engine import storage
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -26,8 +26,7 @@ class BaseModel():
             self.id = str(uuid_gen)
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)
-            
+
     def __str__(self):
         """Returns string representation of an instance"""
         return("[{}] ({}) {}"
