@@ -2,7 +2,6 @@
     """module for task 5
     """
 import json
-from models.base_model import BaseModel 
 
 
 class FileStorage:
@@ -16,13 +15,26 @@ class FileStorage:
 
     def new(self, obj):
         """new """
-        var = "{} {}".format(obj.__class__.__name__, obj.id)
-        self.__objects[var] = obj
+        key = "{}.{}".format(obj.__class__.__name__, obj.id)
+        FileStorage.__objects[key] = obj
 
     def save(self):
-        temp = {}
-        for key, value in self.__objects.items():
-            temp[key] = value.to_dict
+        var = {}
+        for key, value in FileStorage.__objects.items():
+            var[key] = value.to_dict
+        with open(FileStorage.__file_path, 'w', encoding='utf-8') as file:
+            json.dump(var, file)
 
     def reload(self):
-        pass
+        try:
+            with open(FileStorage.__file_path, mode='r', encoding='utf-8') as file:
+                from models.base_model import BaseModel
+                temp = json.loads(file.read())
+                for key, value in FileStorage.__objects.items():
+                    obj = BaseModel(**value)
+                    FileStorage.__objects[key] = obj
+        except IOError:
+            pass
+                    
+            
+
