@@ -39,7 +39,7 @@ class BaseModel():
     def __str__(self):
         """Returns string representation of an instance"""
         return("[{}] ({}) {}"
-               .format(type(self).__name__, self.id, self.__dict__))
+                .format(type(self).__name__, self.id, self.__dict__))
 
     def save(self):
         """Save an instance and set the updated time"""
@@ -51,7 +51,6 @@ class BaseModel():
         var = self.__dict__.copy()
 
         var['__class__'] = type(self).__name__
-        var['created_at'] = self.created_at.isoformat()
-        var['updated_at'] = self.updated_at.isoformat()
-
+        var['created_at'] = self.created_at.strftime(time)
+        var['updated_at'] = self.updated_at.strftime(time)
         return var
