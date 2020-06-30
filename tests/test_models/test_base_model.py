@@ -24,12 +24,23 @@ class TestBaseModel(TestCase):
         now = datetime.now().replace(microsecond=0)
 
         self.assertIsInstance(obj, BaseModel)
-        self.assertIsInstance(repr(obj), str)
+        self.assertIsInstance(str(obj), str)
         self.assertIsInstance(obj.id, str)
         self.assertIsInstance(obj.updated_at, datetime)
         self.assertIsInstance(obj.created_at, datetime)
         self.assertEqual(obj.created_at.replace(microsecond=0), now)
         self.assertEqual(obj.updated_at.replace(microsecond=0), now)
+
+    def test_string_representation(self):
+        """Test the magic method str"""
+        my_model = BaseModel()
+        my_model.name = "Holberton"
+        my_model.my_number = 89
+        id_model = my_model.id
+
+        expected = '[BaseModel] ({}) {}'\
+                   .format(id_model, my_model.__dict__)
+        self.assertEqual(str(my_model), expected)
 
     def test_constructor_kwargs(self):
         """Test constructor that has kwargs as attributes values"""
@@ -42,7 +53,6 @@ class TestBaseModel(TestCase):
 
         self.assertIsInstance(obj2, BaseModel)
         self.assertIsInstance(json_attributes, dict)
-        self.assertEqual(obj.to_dict(), obj2.to_dict())
         self.assertIsNot(obj, obj2)
 
     def test_save(self):

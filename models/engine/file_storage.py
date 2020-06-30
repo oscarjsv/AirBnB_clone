@@ -18,7 +18,8 @@ class FileStorage:
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
 
-        key = f'{type(obj).__name__}.{obj.id}'
+        key = '{}.{}'\
+              .format(type(obj).__name__, obj.id)
         FileStorage.__objects[key] = obj
 
     def save(self):
@@ -34,7 +35,7 @@ class FileStorage:
     def create_object(info):
         """Create an instance from a dictionary"""
         class_obj = info['__class__']
-        instance = f'{class_obj}(**info)'
+        instance = '{}(**info)'.format(class_obj)
         return eval(instance)
 
     def reload(self):
