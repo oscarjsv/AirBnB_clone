@@ -24,7 +24,7 @@ class TestBaseModel(TestCase):
         now = datetime.now().replace(microsecond=0)
 
         self.assertIsInstance(obj, BaseModel)
-        self.assertIsInstance(repr(obj), str)
+        self.assertIsInstance(str(obj), str)
         self.assertIsInstance(obj.id, str)
         self.assertIsInstance(obj.updated_at, datetime)
         self.assertIsInstance(obj.created_at, datetime)
@@ -38,7 +38,8 @@ class TestBaseModel(TestCase):
         my_model.my_number = 89
         id_model = my_model.id
 
-        expected = f'[BaseModel] ({id_model}) {my_model.__dict__}'
+        expected = '[BaseModel] ({}) {}'\
+                   .format(id_model, my_model.__dict__)
         self.assertEqual(str(my_model), expected)
 
     def test_constructor_kwargs(self):
