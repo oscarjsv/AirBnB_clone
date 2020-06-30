@@ -26,8 +26,9 @@ class BaseModel():
         else:
             uuid_gen = uuid.uuid4()
             self.id = str(uuid_gen)
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+            now = datetime.now()
+            self.created_at = now
+            self.updated_at = now
 
             models.storage.new(self)
 
@@ -39,7 +40,7 @@ class BaseModel():
     def __str__(self):
         """Returns string representation of an instance"""
         return("[{}] ({}) {}"
-                .format(type(self).__name__, self.id, self.__dict__))
+               .format(self.__class__.__name__, self.id, self.__dict__))
 
     def save(self):
         """Save an instance and set the updated time"""
@@ -50,7 +51,7 @@ class BaseModel():
         """Returns the attributes of the instance as a dict"""
         var = self.__dict__.copy()
 
-        var['__class__'] = type(self).__name__
-        var['created_at'] = self.created_at.strftime(time)
-        var['updated_at'] = self.updated_at.strftime(time)
+        var['__class__'] = self.__class__.__name__
+        var['created_at'] = self.created_at.isoformat()
+        var['updated_at'] = self.updated_at.isoformat()
         return var
