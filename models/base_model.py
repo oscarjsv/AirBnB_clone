@@ -2,7 +2,7 @@
 """BaseModel for Airbnb Project"""
 import uuid
 from datetime import datetime
-from models.engine import storage
+import models
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -14,19 +14,27 @@ class BaseModel():
         """Constructor"""
         if kwargs:
             for key, value in kwargs.items():
-                if key != "__class__":
-                    setattr(self, key, value)
-                if hasattr(self, 'created_at') and type(self.created_at) is str:
-                    self.created_at = datetime.strptime(kwargs['created_at'], time)
-                if hasattr(self, 'updated_at') and type(self.updated_at) is str:
-                    self.updated_at = datetime.strptime(kwargs['created_at'], time)
-        else:
+                if key == '__class__':
+                    continue
 
+                if key in ['created_at', 'updated_at']:
+                    setattr(self, key, self.string2time(value))
+                    continue
+
+                setattr(self, key, value)
+
+        else:
             uuid_gen = uuid.uuid4()
             self.id = str(uuid_gen)
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.reload(self)
+
+            models.storage.new(self)
+
+    @staticmethod
+    def string2time(date_string):
+        """Converts string to time"""
+        return datetime.strptime(date_string, time)
 
     def __str__(self):
         """Returns string representation of an instance"""
@@ -36,9 +44,7 @@ class BaseModel():
     def save(self):
         """Save an instance and set the updated time"""
         self.updated_at = datetime.now()
-        storage.save()
-        
-
+        models.storage.save()
 
     def to_dict(self):
         """Returns the attributes of the instance as a dict"""
