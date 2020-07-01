@@ -45,10 +45,16 @@ class HBNBCommand(cmd.Cmd):
         arg = HBNBCommand.parse_argument(arg)
         Actions.update(arg)
 
+    def default(ignore, line):
+        """Handle default point cmd"""
+        arg = HBNBCommand.parse_argument(line)
+        Actions.default(arg)
+
     @staticmethod
     def parse_argument(arg):
         """Convert any argument string into argument tuple"""
         return tuple(map(str, arg.split()))
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

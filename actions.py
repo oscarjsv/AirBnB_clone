@@ -8,6 +8,7 @@ from models.city import City
 from models.place import Place
 from models.review import Review
 from models import storage
+from utils import Utils
 
 
 class Actions:
@@ -127,7 +128,53 @@ class Actions:
             print('** value missing **')
             return
 
+        # email "aibnb@holbertonschool.com" first_name "Betty"
         cast_type = type(attribute).__name__
         value = eval('{}(value)'.format(cast_type))
         setattr(obj, attribute, value.lstrip('"').rstrip('"'))
         storage.save()
+
+    @staticmethod
+    def get_function(action, path=None):
+        """Return the function that do the action"""
+        actions = {'all': Actions.all, 'count': Actions.count,
+                   'show': Actions.show, 'destroy': Actions.destroy,
+                   'update': Actions.update}
+
+        if action not in set(actions.keys()):
+            print('*** Unknown syntax: {}'.format(path))
+            return None
+
+        return actions.get(action)
+
+    @staticmethod
+    def count(class_name):
+        """Retrieve the number of instances of a class: <class name>.count()"""
+        objects = storage.get_objects(class_name[0])
+        length = len(objects)
+        print(length)
+
+    @staticmethod
+    def default(arg):
+        """Handle default cmd"""
+        path = arg[0]
+        if '.' not in path:
+            print('*** Unknown syntax: {}'.format(path))
+            return
+
+        class_name, action = path.split('.')
+        if not Actions.class_exists(class_name):
+            print('** class doesn\'t exist **')
+            return
+
+        if not action:
+            print('*** Unknown syntax: {}'.format(path))
+            return
+
+        action, arguments = Utils.split_action(arg)
+
+        act = Actions.get_function(action, arg[0])
+        if not act:
+            return
+
+        act(arguments)
