@@ -1,20 +1,15 @@
 #!/usr/bin/python3
-    """moldule for the user
-    """
+"""Module"""
+from .base_model import BaseModel
 
-from base_model import BaseModel
 
 class User(BaseModel):
-    """class user
-
-    Args:
-        BaseModel (super class):
-    """
+    """Inherits from BaseModel"""
     email = ""
     password = ""
-    first_name ""
+    first_name = ""
     last_name = ""
 
     def __init__(self, *args, **kwargs):
-        """initializes user"""
+        """Overriding constructor"""
         super().__init__(*args, **kwargs)

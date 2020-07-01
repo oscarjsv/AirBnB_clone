@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """Module for define console actions"""
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
 class Actions:
     """Handle console actions"""
-    __classes = {'BaseModel': BaseModel}
+    __classes = {'BaseModel': BaseModel, 'User': User}
 
     @staticmethod
     def class_exists(class_name):
