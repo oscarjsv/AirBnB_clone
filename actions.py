@@ -2,12 +2,19 @@
 """Module for define console actions"""
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
 from models import storage
 
 
 class Actions:
     """Handle console actions"""
-    __classes = {'BaseModel': BaseModel, 'User': User}
+    __classes = {'BaseModel': BaseModel, 'User': User, 'State': State,
+                 'Amenity': Amenity, 'City': City, 'Place': Place,
+                 'Review': Review}
 
     @staticmethod
     def class_exists(class_name):
