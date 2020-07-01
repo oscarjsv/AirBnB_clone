@@ -127,11 +127,15 @@ class Actions:
         if not value:
             print('** value missing **')
             return
-
-        # email "aibnb@holbertonschool.com" first_name "Betty"
+        # 0         1                           2          3    4     5
+        # email "aibnb@holbertonschool.com" first_name "Betty" test "lol"
         cast_type = type(attribute).__name__
         value = eval('{}(value)'.format(cast_type))
-        setattr(obj, attribute, value.lstrip('"').rstrip('"'))
+
+        values = arg[2:]
+        for idx in range(0, len(values), 2):
+            setattr(obj, values[idx], values[idx + 1].lstrip('"').rstrip('"'))
+
         storage.save()
 
     @staticmethod
